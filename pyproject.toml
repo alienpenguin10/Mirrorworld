@@ -50,6 +50,9 @@ raster = ["rasterio"]
 # LiDAR point clouds (mirrorworld.lidar)
 lidar = ["laspy[lazrs]"]
 all = ["rasterio", "laspy[lazrs]"]
+
+[dependency-groups]
+# Development only (PEP 735): not part of the published metadata. Install with `pip install --group test`.
 test = ["pytest", "pytest-asyncio", "rasterio", "laspy[lazrs]"]
 
 [project.urls]
