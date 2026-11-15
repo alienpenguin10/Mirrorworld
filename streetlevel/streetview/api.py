@@ -1,0 +1,234 @@
+import aiohttp
+import json
+from typing import Tuple
+from .protobuf import *
+from .util import is_third_party_panoid
+from ..util import get_json, get_json_async, post_json, post_json_async
+
+_find_panorama_endpoint = "https://maps.googleapis.com/$rpc/google.internal.maps.mapsjs.v1.MapsJsInternalService/SingleImageSearch"
+
+
+def split_ietf(tag: str) -> Tuple[str, str]:
+    """
+    Splits an IETF language tag into its language part and country part.
+    """
+    parts = tag.split("-")
+    lang = parts[0]
+    country = parts[1] if len(parts) > 1 else parts[0]
+    return lang, country
+
+
+def build_coverage_tile_request_url(tile_x, tile_y):
+    url = "https://www.google.com/maps/photometa/ac/v1?pb=!1m1!1smaps_sv.tactile!6m3!1i{0}!2i{1}!3i17!8b1"
+    url = url.format(tile_x, tile_y)
+    return url
+
+
+def build_find_panorama_post_body(lat, lon, radius, download_depth, locale, search_third_party) -> str:
+    radius = float(radius)
+    toggles = []
+    include_resolution_info = True
+    include_street_name_and_date = True
+    include_copyright_information = True
+    include_neighbors_and_historical = True
+    ietf_lang, ietf_country = split_ietf(locale)
+
+    if search_third_party:
+        image_type = 10
+    else:
+        image_type = 2
+
+    if download_depth:
+        depth1 = [0]
+        depth2 = [2]
+    else:
+        depth1 = []
+        depth2 = []
+
+    if include_resolution_info:
+        toggles.append(1)
+    if include_street_name_and_date:
+        toggles.append(2)
+    if include_copyright_information:
+        toggles.append(3)
+    toggles.append(4)
+    if include_neighbors_and_historical:
+        toggles.append(6)
+    toggles.append(8)
+
+    # Ari timestamp (and two other unknown values)
+    toggles.append(12)
+
+    search_message = [
+        ["apiv3", None, None, None, "US"],
+        [[None, None, lat, lon], radius],
+        [
+         None,
+         [ietf_lang, ietf_country],
+         None,
+         None,
+         None,
+         None,
+         None,
+         None,
+         [2],
+         None,
+         [[[image_type, True, 2]]],
+        ],
+        [
+            toggles,
+            None,
+            None,
+            None,
+            depth1,
+            depth2,
+        ]
+    ]
+
+    return json.dumps(search_message)
+
+
+def build_find_panorama_by_id_request_url(panoid, download_depth, locale):
+    is_ari = is_third_party_panoid(panoid)
+    pano_type = 10 if is_ari else 2
+    toggles = []
+    include_resolution_info = True
+    include_street_name_and_date = True
+    include_copyright_information = True
+    include_neighbors_and_historical = True
+    include_places = True
+    include_street_labels = True
+    ietf_lang, ietf_country = split_ietf(locale)
+
+    if include_resolution_info:
+        toggles.append(ProtobufEnum(1))
+    if include_street_name_and_date:
+        toggles.append(ProtobufEnum(2))
+    if include_copyright_information:
+        toggles.append(ProtobufEnum(3))
+    toggles.append(ProtobufEnum(4))  # does nothing?
+    if include_places:
+        toggles.append(ProtobufEnum(5))
+    if include_neighbors_and_historical:
+        toggles.append(ProtobufEnum(6))
+    if include_street_labels:
+        toggles.append(ProtobufEnum(8))
+
+    # Ari timestamp (and two other unknown values)
+    toggles.append(ProtobufEnum(12))
+
+    # Imagery URL for the new ari panoids
+    # (as used on maps.google.com; the embeddable viewer uses a different endpoint)
+    # if is_ari:
+    #    toggles.append(ProtobufEnum(17))
+
+    # these change stuff, but idk what exactly:
+    # toggles.append(ProtobufEnum(11))
+    # toggles.append(ProtobufEnum(13))
+
+    if download_depth:
+        depth1 = [{1: ProtobufEnum(1)}, {1: ProtobufEnum(2)}]
+        depth2 = [{1: ProtobufEnum(1)}, {1: ProtobufEnum(2)}]
+    else:
+        depth1 = [{}]
+        depth2 = [{}]
+
+    # this is the protobuf message in the request URL written out as a dict
+    pano_request_message = {
+        1: {1: 'maps_sv.tactile', 11: {2: {1: True}}},
+        2: {1: ietf_lang, 2: ietf_country},
+        3: {1: {1: ProtobufEnum(pano_type), 2: panoid}},
+        4: {
+            1: toggles,
+            2: {1: ProtobufEnum(1)},  # changing this to any other value causes huge changes;
+            # haven't looked into it any further though
+            4: {1: 48},  # all this does is change the size param in an icon URL
+            5: depth1,
+            6: depth2,
+            9: {  # none of these seem to do anything
+                1: [
+                    {1: ProtobufEnum(2), 2: True, 3: ProtobufEnum(2)},
+                    {1: ProtobufEnum(2), 2: False, 3: ProtobufEnum(3)},
+                    {1: ProtobufEnum(3), 2: True, 3: ProtobufEnum(2)},
+                    {1: ProtobufEnum(3), 2: False, 3: ProtobufEnum(3)},
+                    {1: ProtobufEnum(8), 2: False, 3: ProtobufEnum(3)},
+                    {1: ProtobufEnum(1), 2: False, 3: ProtobufEnum(3)},
+                    {1: ProtobufEnum(4), 2: False, 3: ProtobufEnum(3)},
+                    {1: ProtobufEnum(10), 2: True, 3: ProtobufEnum(2)},
+                    {1: ProtobufEnum(10), 2: False, 3: ProtobufEnum(3)}
+                ]
+            },
+            11: {
+                3: {4: True}
+            }
+        }
+    }
+    url = f"https://www.google.com/maps/photometa/v1?authuser=0&hl={ietf_lang}&gl={ietf_country}&pb=" \
+          + to_protobuf_url(pano_request_message)
+
+    return url
+
+
+def find_panorama(lat, lon, radius=50, download_depth=False, locale="en", search_third_party=False, session=None):
+    return post_json(
+        _find_panorama_endpoint,
+        build_find_panorama_post_body(lat, lon, radius, download_depth, locale, search_third_party),
+        headers={
+            "content-type": "application/json+protobuf",
+        },
+        session=session
+    )
+
+
+async def find_panorama_async(lat, lon, session: aiohttp.ClientSession, radius=50,
+                              download_depth=False, locale="en", search_third_party=False):
+    return await post_json_async(
+        _find_panorama_endpoint,
+        build_find_panorama_post_body(lat, lon, radius, download_depth, locale, search_third_party),
+        session,
+        headers={
+            "content-type": "application/json+protobuf",
+        },
+    )
+
+
+def find_panorama_by_id(panoid, download_depth=False, locale="en", session=None):
+    return get_json(
+        build_find_panorama_by_id_request_url(panoid, download_depth, locale),
+        session=session,
+        headers={
+            "Accept": "*/*",
+            "Host": "www.google.com",
+            "Referer": "https://www.google.com/",
+            "Alt-Used": "www.google.com",
+            "User-Agent": "Mozilla/5.0 (Windows NT 11.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0",
+        },
+        preprocess_function=lambda text: text[4:])
+
+
+async def find_panorama_by_id_async(panoid, session, download_depth=False, locale="en"):
+    return await get_json_async(
+        build_find_panorama_by_id_request_url(panoid, download_depth, locale),
+        session,
+        headers={
+            "Accept": "*/*",
+            "Host": "www.google.com",
+            "Referer": "https://www.google.com/",
+            "Alt-Used": "www.google.com",
+            "User-Agent": "Mozilla/5.0 (Windows NT 11.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0",
+        },
+        preprocess_function=lambda text: text[4:])
+
+
+def get_coverage_tile(tile_x, tile_y, session=None):
+    return get_json(
+        build_coverage_tile_request_url(tile_x, tile_y),
+        session=session,
+        preprocess_function=lambda text: text[4:])
+
+
+async def get_coverage_tile_async(tile_x, tile_y, session):
+    return await get_json_async(
+        build_coverage_tile_request_url(tile_x, tile_y),
+        session,
+        preprocess_function=lambda text: text[4:])
