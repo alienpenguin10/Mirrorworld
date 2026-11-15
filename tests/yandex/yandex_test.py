@@ -3,8 +3,8 @@ import json
 
 from pytest import approx
 
-from streetlevel import yandex
-import streetlevel.yandex.parse
+from mirrorworld import yandex
+import mirrorworld.yandex.parse
 
 
 def test_parse_panorama_response():

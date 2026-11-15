@@ -5,7 +5,7 @@ import laspy
 import numpy as np
 from pytest import approx
 
-from streetlevel.lidar import ept, usgs3dep
+from mirrorworld.lidar import ept, usgs3dep
 
 
 def test_node_bounds():

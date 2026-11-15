@@ -2,9 +2,9 @@ from datetime import datetime, timezone
 
 from pytest import approx, raises
 import json
-from streetlevel import streetview
-from streetlevel.dataclasses import Size
-import streetlevel.streetview.parse
+from mirrorworld import streetview
+from mirrorworld.dataclasses import Size
+import mirrorworld.streetview.parse
 
 
 def test_is_third_party_panoid():

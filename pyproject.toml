@@ -3,21 +3,28 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "streetlevel"
-version = "0.13.0"
-license = "MIT"
-authors = [
-  { name="sk-zk", email="sk-zk@users.noreply.github.com" },
-]
-description = "Download panoramas and metadata from Street View, Look Around, and more"
+name = "mirrorworld"
+dynamic = ["version"]
+description = "Fetch street-level, aerial, satellite, elevation, LiDAR and map data for any place"
 readme = "README.md"
-requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "alienpenguin10" },
+  { name = "sk-zk", email = "sk-zk@users.noreply.github.com" },
+]
+maintainers = [
+  { name = "alienpenguin10" },
+]
+requires-python = ">=3.10"
+keywords = ["street view", "mapillary", "aerial imagery", "satellite", "lidar", "elevation", "gis", "remote sensing"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Image Processing",
 ]
 dependencies = [
     "aiohttp",
@@ -33,19 +40,28 @@ dependencies = [
     "pyexiv2",
     "pyfrpc == 0.2.13",
     "pyproj",
-    "pytest",
-    "pytest-asyncio",
     "requests",
     "scipy",
 ]
 
 [project.optional-dependencies]
-# Mirrorworld additions: GeoTIFF/COG reading and writing (streetlevel.services WCS/ArcGIS tiff, elevation,
-# satellite, Raster.save to .tif) and LiDAR point clouds (streetlevel.lidar).
+# GeoTIFF/COG reading and writing (mirrorworld.services WCS/ArcGIS tiff, elevation, satellite, Raster.save to .tif)
 raster = ["rasterio"]
+# LiDAR point clouds (mirrorworld.lidar)
 lidar = ["laspy[lazrs]"]
 all = ["rasterio", "laspy[lazrs]"]
+test = ["pytest", "pytest-asyncio", "rasterio", "laspy[lazrs]"]
 
 [project.urls]
-"Homepage" = "https://github.com/sk-zk/streetlevel"
-"Bug Tracker" = "https://github.com/sk-zk/streetlevel/issues"
+"Homepage" = "https://github.com/alienpenguin10/Mirrorworld"
+"Bug Tracker" = "https://github.com/alienpenguin10/Mirrorworld/issues"
+"Based on" = "https://github.com/sk-zk/streetlevel"
+
+[tool.hatch.build.targets.sdist]
+include = ["mirrorworld", "tests", "docs", "README.md", "LICENSE", "CREDITS.md", "pyproject.toml"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["mirrorworld"]
+
+[tool.hatch.version]
+path = "mirrorworld/__init__.py"

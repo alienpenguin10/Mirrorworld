@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'streetlevel'
-copyright = '2025, skzk'
-author = 'skzk'
-release = '0.13.0'
+project = 'mirrorworld'
+copyright = '2022-2026, skzk and alienpenguin10'
+author = 'alienpenguin10, based on streetlevel by skzk'
+release = '0.1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

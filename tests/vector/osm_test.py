@@ -1,5 +1,5 @@
 # Mirrorworld addition (not in upstream streetlevel). Offline: no network requests.
-from streetlevel.vector import osm
+from mirrorworld.vector import osm
 
 
 def test_build_query():

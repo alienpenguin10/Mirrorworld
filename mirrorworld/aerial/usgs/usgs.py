@@ -1,0 +1,142 @@
+# Mirrorworld addition (not in upstream streetlevel).
+"""USGS The National Map orthoimagery (NAIP and high-resolution urban imagery), contiguous US only."""
+from typing import Optional
+
+from PIL import Image
+from aiohttp import ClientSession
+from requests import Session
+
+from . import api
+from ..dataclasses import AerialImage
+from ..util import TileResponse, bbox_to_pixels, get_tiled_image_async, run_sync, save_aerial_image, \
+    tile_to_image, wgs84_to_pixel, TILE_SIZE, DEFAULT_MAX_TILES, DEFAULT_MAX_CONCURRENCY
+
+PROVIDER = "USGS The National Map Imagery"
+MAX_ZOOM = 23  # the service advertises 23 levels; its tile cache currently stops at 16
+MIN_DETAILED_ZOOM = 10
+"""Outside the US the cache only holds a coarse global background (zoom <= 8); lower maxima count as no imagery."""
+
+
+def get_tile(x: int, y: int, zoom: int, session: Session = None) -> Optional[Image.Image]:
+    """
+    Downloads one aerial tile.
+
+    :param x: X coordinate of the tile.
+    :param y: Y coordinate of the tile.
+    :param zoom: Zoom level.
+    :param session: *(optional)* A requests session.
+    :return: The tile as PIL image, or None if USGS has no imagery for it at this zoom level.
+    """
+    if not api.tile_exists(x, y, zoom, session):
+        return None
+    response = api.get_tile(x, y, zoom, session)
+    return None if _is_missing(response) else tile_to_image(response)
+
+
+async def get_tile_async(x: int, y: int, zoom: int, session: ClientSession) -> Optional[Image.Image]:
+    # Tiles outside the cache return 404, but the tilemap endpoint answers without a download,
+    # which keeps this consistent with the Esri provider.
+    if not await api.tile_exists_async(x, y, zoom, session):
+        return None
+    response = await api.get_tile_async(x, y, zoom, session)
+    return None if _is_missing(response) else tile_to_image(response)
+
+
+def find_max_zoom(lat: float, lon: float, session: Session = None) -> Optional[int]:
+    """
+    Finds the highest zoom level with imagery at a location.
+
+    :param lat: Latitude.
+    :param lon: Longitude.
+    :param session: *(optional)* A requests session.
+    :return: The zoom level, e.g. 16 (≈1.6 m/px) in Seattle, or None if there is no
+        detailed imagery (outside the US only a coarse global background exists).
+    """
+    for zoom in range(MAX_ZOOM, -1, -1):
+        x, y = _tile_at(lat, lon, zoom)
+        if api.tile_exists(x, y, zoom, session):
+            return zoom if zoom >= MIN_DETAILED_ZOOM else None
+    return None
+
+
+async def find_max_zoom_async(lat: float, lon: float, session: ClientSession) -> Optional[int]:
+    for zoom in range(MAX_ZOOM, -1, -1):
+        x, y = _tile_at(lat, lon, zoom)
+        if await api.tile_exists_async(x, y, zoom, session):
+            return zoom if zoom >= MIN_DETAILED_ZOOM else None
+    return None
+
+
+def get_image(north: float, west: float, south: float, east: float, zoom: int = None,
+              max_tiles: int = DEFAULT_MAX_TILES,
+              max_concurrency: int = DEFAULT_MAX_CONCURRENCY) -> AerialImage:
+    """
+    Downloads the aerial imagery inside a bounding box and stitches it into one image.
+
+    :param north: Latitude of the top edge.
+    :param west: Longitude of the left edge.
+    :param south: Latitude of the bottom edge.
+    :param east: Longitude of the right edge.
+    :param zoom: *(optional)* Zoom level. Defaults to the highest one available at the center of the box.
+    :param max_tiles: *(optional)* Refuse requests covering more tiles than this. Defaults to 20000.
+    :param max_concurrency: *(optional)* Maximum number of simultaneous requests. Defaults to 8.
+    :return: The stitched image.
+    """
+    return run_sync(get_image_async, north, west, south, east, zoom=zoom, max_tiles=max_tiles,
+                    max_concurrency=max_concurrency)
+
+
+async def get_image_async(north: float, west: float, south: float, east: float, session: ClientSession,
+                          zoom: int = None, max_tiles: int = DEFAULT_MAX_TILES,
+                          max_concurrency: int = DEFAULT_MAX_CONCURRENCY) -> AerialImage:
+    if zoom is None:
+        zoom = await find_max_zoom_async((north + south) / 2, (west + east) / 2, session)
+        if zoom is None:
+            raise ValueError("No imagery at the center of the bounding box")
+    left, top, right, bottom = bbox_to_pixels(north, west, south, east, zoom)
+    missing = await api.find_missing_tiles_async(left, top, right, bottom, zoom, session)
+    return await get_tiled_image_async(
+        north, west, south, east, zoom, PROVIDER,
+        lambda x, y: api.build_tile_url(x, y, zoom), _is_missing, session,
+        skip_tiles=missing, max_tiles=max_tiles, max_concurrency=max_concurrency)
+
+
+def download_image(north: float, west: float, south: float, east: float, path: str, zoom: int = None,
+                   pil_args: dict = None, max_tiles: int = DEFAULT_MAX_TILES,
+                   max_concurrency: int = DEFAULT_MAX_CONCURRENCY) -> AerialImage:
+    """
+    Downloads the aerial imagery inside a bounding box to a georeferenced file
+    (world file, ``.aux.xml`` and ``.json`` beside it; see :func:`mirrorworld.aerial.util.save_aerial_image`).
+
+    :param north: Latitude of the top edge.
+    :param west: Longitude of the left edge.
+    :param south: Latitude of the bottom edge.
+    :param east: Longitude of the right edge.
+    :param path: Output path.
+    :param zoom: *(optional)* Zoom level. Defaults to the highest one available at the center of the box.
+    :param pil_args: *(optional)* Additional arguments for PIL's ``Image.save`` method.
+    :param max_tiles: *(optional)* Refuse requests covering more tiles than this. Defaults to 20000.
+    :param max_concurrency: *(optional)* Maximum number of simultaneous requests. Defaults to 8.
+    :return: The stitched image.
+    """
+    aerial = get_image(north, west, south, east, zoom, max_tiles, max_concurrency)
+    save_aerial_image(aerial, path, pil_args)
+    return aerial
+
+
+async def download_image_async(north: float, west: float, south: float, east: float, path: str,
+                               session: ClientSession, zoom: int = None, pil_args: dict = None,
+                               max_tiles: int = DEFAULT_MAX_TILES,
+                               max_concurrency: int = DEFAULT_MAX_CONCURRENCY) -> AerialImage:
+    aerial = await get_image_async(north, west, south, east, session, zoom, max_tiles, max_concurrency)
+    save_aerial_image(aerial, path, pil_args)
+    return aerial
+
+
+def _is_missing(response: TileResponse) -> bool:
+    return response.status == 404
+
+
+def _tile_at(lat: float, lon: float, zoom: int):
+    px, py = wgs84_to_pixel(lat, lon, zoom)
+    return int(px // TILE_SIZE), int(py // TILE_SIZE)

@@ -1,6 +1,6 @@
 import pytest
 
-from streetlevel import util
+from mirrorworld import util
 
 
 @pytest.mark.asyncio

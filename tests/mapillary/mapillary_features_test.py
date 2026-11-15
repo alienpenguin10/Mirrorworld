@@ -8,9 +8,9 @@ import mapbox_vector_tile
 import numpy as np
 from pytest import approx
 
-from streetlevel import mapillary
-import streetlevel.mapillary.mapillary as mly
-import streetlevel.mapillary.parse
+from mirrorworld import mapillary
+import mirrorworld.mapillary.mapillary as mly
+import mirrorworld.mapillary.parse
 
 
 def test_parse_map_feature_tile():

@@ -5,9 +5,9 @@ from datetime import datetime
 
 from pytest import approx
 
-from streetlevel import kartaview
-import streetlevel.kartaview.kartaview
-import streetlevel.kartaview.parse
+from mirrorworld import kartaview
+import mirrorworld.kartaview.kartaview
+import mirrorworld.kartaview.parse
 
 
 def test_parse_panoramas():
@@ -49,6 +49,6 @@ def test_missing_photo():
 def test_sort_and_limit():
     with open("kartaview/data/find.json", "r") as f:
         panos = kartaview.parse.parse_panoramas(json.load(f))
-    near = streetlevel.kartaview.kartaview._sort_and_limit(panos, 47.6062, -122.3321, 10, None)
+    near = mirrorworld.kartaview.kartaview._sort_and_limit(panos, 47.6062, -122.3321, 10, None)
     assert [p.id for p in near] == [15825033]
     assert near[0].distance == approx(5.1, abs=0.5)

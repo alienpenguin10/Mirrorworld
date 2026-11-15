@@ -1,9 +1,9 @@
 # Mirrorworld addition (not in upstream streetlevel). Offline: no network requests.
 from datetime import date
 
-from streetlevel.aerial import wayback
-import streetlevel.aerial.wayback.wayback as wb
-import streetlevel.aerial.wayback.api as wb_api
+from mirrorworld.aerial import wayback
+import mirrorworld.aerial.wayback.wayback as wb
+import mirrorworld.aerial.wayback.api as wb_api
 
 
 def test_parse_config():
@@ -32,7 +32,7 @@ def test_parse_date():
 
 
 def test_merge_versions():
-    from streetlevel.aerial.wayback.release import WaybackRelease, WaybackVersion
+    from mirrorworld.aerial.wayback.release import WaybackRelease, WaybackVersion
 
     def version(release_day, capture, source="Vivid"):
         release = WaybackRelease(id=release_day, date=date(2025, 1, release_day), title="t", tile_url_template="u")

@@ -1,8 +1,8 @@
 from pytest import approx
 import json
 
-from streetlevel import ja
-import streetlevel.ja.parse
+from mirrorworld import ja
+import mirrorworld.ja.parse
 
 
 def test_parse_panorama_radius_response():

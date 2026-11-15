@@ -1,7 +1,7 @@
 import math
 
 from pytest import approx
-from streetlevel import geo
+from mirrorworld import geo
 
 
 def test_wgs84_to_tile_coord():

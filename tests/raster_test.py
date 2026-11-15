@@ -4,7 +4,7 @@ import json
 import numpy as np
 from pytest import approx
 
-from streetlevel.raster import Raster, grid_for_bounds, utm_crs, bbox_to_crs, read_geotiff
+from mirrorworld.raster import Raster, grid_for_bounds, utm_crs, bbox_to_crs, read_geotiff
 
 
 def make():

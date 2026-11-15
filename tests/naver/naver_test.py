@@ -3,9 +3,9 @@ import json
 
 from pytest import approx
 
-from streetlevel import naver
-import streetlevel.naver.parse
-from streetlevel.naver.panorama import PanoramaType
+from mirrorworld import naver
+import mirrorworld.naver.parse
+from mirrorworld.naver.panorama import PanoramaType
 
 
 def test_parse_panorama():

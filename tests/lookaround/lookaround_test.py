@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 from pytest import approx
 
-from streetlevel import lookaround
-from streetlevel.lookaround.proto import GroundMetadataTile_pb2
-from streetlevel.lookaround.panorama import CoverageType
-import streetlevel.lookaround.parse
+from mirrorworld import lookaround
+from mirrorworld.lookaround.proto import GroundMetadataTile_pb2
+from mirrorworld.lookaround.panorama import CoverageType
+import mirrorworld.lookaround.parse
 
 
 def test_parse_coverage_tile():

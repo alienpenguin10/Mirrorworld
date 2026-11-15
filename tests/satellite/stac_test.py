@@ -1,8 +1,8 @@
 # Mirrorworld addition (not in upstream streetlevel). Offline: no network requests.
 from datetime import datetime, timezone
 
-from streetlevel.satellite import stac
-from streetlevel.satellite.scene import Scene
+from mirrorworld.satellite import stac
+from mirrorworld.satellite.scene import Scene
 
 
 def scene(id, day, bbox=(-123, 47, -122, 48), cloud=5.0):

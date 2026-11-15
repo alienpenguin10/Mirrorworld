@@ -1,5 +1,5 @@
-streetlevel.dataclasses
+mirrorworld.dataclasses
 ===================================
 
-    .. automodule:: streetlevel.dataclasses
+    .. automodule:: mirrorworld.dataclasses
       :members:

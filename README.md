@@ -1,18 +1,25 @@
-# streetlevel
-**streetlevel** is a library for downloading panoramas and metadata from street-level imagery services
-such as Google Street View, Apple Look Around, and several others. It provides a simple abstraction
-over the internal APIs of the supported services &ndash; this means that no API keys are required, but the
-library may break unexpectedly. 
+# mirrorworld
+**mirrorworld** fetches data about a place from many sources with one consistent API: street-level imagery
+(Google Street View, Apple Look Around, Mapillary, KartaView, Panoramax and more), detected street assets,
+aerial and satellite imagery, elevation models, LiDAR point clouds, any OGC/ArcGIS map service and
+OpenStreetMap features. Everything is downloaded on demand for a point or bounding box; nothing is hosted by
+this project.
+
+It is a fork of [streetlevel](https://github.com/sk-zk/streetlevel) by sk-zk, whose street-level providers use the
+services' internal APIs: no API keys are required for them, but they may break unexpectedly.
 
 (Nearly) all functions are available as either a sync function using `requests` or an async function
 using `aiohttp`, requiring a `ClientSession`.
 
 ## Installation
-streetlevel is available on PyPI:
 
 ```sh
-pip install streetlevel
+pip install mirrorworld
+pip install "mirrorworld[all]"   # plus GeoTIFF (rasterio) and LiDAR (laspy) support
 ```
+
+The extras can also be installed separately: `mirrorworld[raster]` for satellite, elevation and GeoTIFF output,
+`mirrorworld[lidar]` for point clouds.
 
 macOS users may need to install [additional dependencies](https://github.com/LeoHsiao1/pyexiv2/blob/master/docs/Tutorial.md#faq):
 
@@ -25,7 +32,7 @@ brew install inih
 Downloading the closest Google Street View panorama to a specific location, sync:
 
 ```python
-from streetlevel import streetview
+from mirrorworld import streetview
 
 pano = streetview.find_panorama(46.883958, 12.169002)
 streetview.download_panorama(pano, f"{pano.id}.jpg")
@@ -34,7 +41,7 @@ streetview.download_panorama(pano, f"{pano.id}.jpg")
 Or async:
 
 ```python
-from streetlevel import streetview
+from mirrorworld import streetview
 from aiohttp import ClientSession
 
 async with ClientSession() as session:
@@ -42,8 +49,8 @@ async with ClientSession() as session:
     await streetview.download_panorama_async(pano, f"{pano.id}.jpg", session)
 ```
 
-## Mirrorworld additions: more modalities for a place
-This fork adds sources that researchers commonly need next to street-level panoramas. Everything is fetched on
+## More modalities for a place
+On top of streetlevel's providers, mirrorworld adds sources that researchers commonly need next to street-level panoramas. Everything is fetched on
 demand for a point or a bounding box (WGS84, lat/lon order) and nothing is hosted by us; results carry their
 georeferencing and source metadata. Sync and async variants are provided wherever the work is network-bound.
 
@@ -61,12 +68,12 @@ georeferencing and source metadata. Sync and async variants are provided whereve
 | Vector map data | `vector.osm` | OpenStreetMap via Overpass (ODbL) | worldwide; tag completeness varies (UK street cabinets and poles are sparsely mapped) | none |
 
 ```python
-from streetlevel import mapillary, panoramax
-from streetlevel.aerial import wayback, pdok
-from streetlevel.satellite import sentinel2
-from streetlevel.elevation import ahn
-from streetlevel.lidar import usgs3dep
-from streetlevel.vector import osm
+from mirrorworld import mapillary, panoramax
+from mirrorworld.aerial import wayback, pdok
+from mirrorworld.satellite import sentinel2
+from mirrorworld.elevation import ahn
+from mirrorworld.lidar import usgs3dep
+from mirrorworld.vector import osm
 
 poles = mapillary.find_map_features(47.68, -122.30, radius=150, values=["object--support--utility-pole"])
 pics = panoramax.find_panoramas(51.5088, -0.127, radius=30)
@@ -78,15 +85,16 @@ las = usgs3dep.get_points(47.6068, -122.3340, 47.6058, -122.3325, resolution=1.0
 cabinets = osm.find_features(47.61, -122.34, 47.60, -122.33, {"man_made": "street_cabinet"})
 ```
 
-Optional dependencies: `pip install streetlevel[raster]` (rasterio: GeoTIFF/COG for satellite, elevation, WCS,
-ArcGIS) and `pip install streetlevel[lidar]` (laspy with LAZ support). Mapillary reads its token from
+Optional dependencies: `pip install "mirrorworld[raster]"` (rasterio: GeoTIFF/COG for satellite, elevation, WCS,
+ArcGIS) and `pip install "mirrorworld[lidar]"` (laspy with LAZ support). Mapillary reads its token from
 `access_token=` or `MAPILLARY_ACCESS_TOKEN`.
 
 Each source keeps its own terms (listed in each module's docstring and the docs). Bing and Google tiles use
 unofficial endpoints; check their terms before relying on them.
 
 ## Documentation
-Documentation is available at [streetlevel.readthedocs.io](https://streetlevel.readthedocs.io/).
+The API reference lives in [`docs/`](docs/) (Sphinx: `pip install -r docs/requirements.txt && make -C docs html`).
+The original streetlevel documentation is at [streetlevel.readthedocs.io](https://streetlevel.readthedocs.io/).
 
 ## Functionality overview
 Services covering multiple countries are on the left; services covering one specific country are on the right.

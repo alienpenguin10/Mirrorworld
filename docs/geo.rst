@@ -1,5 +1,5 @@
-streetlevel.geo
+mirrorworld.geo
 ===================================
 
-    .. automodule:: streetlevel.geo
+    .. automodule:: mirrorworld.geo
       :members:

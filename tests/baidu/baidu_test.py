@@ -3,9 +3,9 @@ import json
 
 from pytest import approx
 
-from streetlevel import baidu
-import streetlevel.baidu.parse
-from streetlevel.baidu.panorama import Provider
+from mirrorworld import baidu
+import mirrorworld.baidu.parse
+from mirrorworld.baidu.panorama import Provider
 
 
 def test_parse_panorama_response():

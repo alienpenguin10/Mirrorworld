@@ -6,8 +6,8 @@ from datetime import datetime, timezone
 import mapbox_vector_tile
 from pytest import approx, raises
 
-from streetlevel import mapillary
-import streetlevel.mapillary.parse
+from mirrorworld import mapillary
+import mirrorworld.mapillary.parse
 
 
 def test_parse_panorama():

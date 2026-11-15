@@ -4,7 +4,7 @@ import struct
 
 from pytest import approx
 
-from streetlevel.streetview import depth
+from mirrorworld.streetview import depth
 
 
 def build_depth_map(width, height, planes, plane_indices):

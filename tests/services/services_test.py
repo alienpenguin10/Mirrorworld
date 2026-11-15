@@ -4,8 +4,8 @@ import asyncio
 import numpy as np
 from pytest import approx
 
-from streetlevel.services import wms, wmts, wcs
-from streetlevel.services.util import mosaic_async, is_north_first, meters_per_unit
+from mirrorworld.services import wms, wmts, wcs
+from mirrorworld.services.util import mosaic_async, is_north_first, meters_per_unit
 
 WMS_CAPS = b"""<?xml version="1.0"?>
 <WMS_Capabilities version="1.3.0" xmlns="http://www.opengis.net/wms"><Capability><Layer><Title>root</Title>
@@ -87,7 +87,7 @@ def test_mosaic():
 
 def test_pdok_extent():
     from pytest import raises
-    from streetlevel.aerial.pdok import pdok
+    from mirrorworld.aerial.pdok import pdok
     pdok._check_extent(52.38, 4.88, 52.37, 4.90)            # Amsterdam: fine
     with raises(ValueError):
         pdok._check_extent(51.51, -0.13, 51.50, -0.12)      # London
@@ -95,7 +95,7 @@ def test_pdok_extent():
 
 def test_ea_coverage_lookup():
     from pytest import raises
-    from streetlevel.elevation import ea
+    from mirrorworld.elevation import ea
     ids = ["13787b9a__Lidar_Composite_Elevation_DTM_1m", "13787b9a__Lidar_Composite_Hillshade_DTM_1m"]
     assert ea._pick(ids, ea.DTM_SUFFIX, "u") == ids[0]
     with raises(ValueError):

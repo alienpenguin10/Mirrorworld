@@ -1,5 +1,5 @@
 from pytest import approx
-from streetlevel.lookaround.geo import protobuf_tile_offset_to_wgs84, convert_altitude, convert_pano_orientation
+from mirrorworld.lookaround.geo import protobuf_tile_offset_to_wgs84, convert_altitude, convert_pano_orientation
 
 
 def test_protobuf_tile_offset_to_wgs84():

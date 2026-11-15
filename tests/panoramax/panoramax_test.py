@@ -5,9 +5,9 @@ from datetime import datetime, timedelta, timezone
 
 from pytest import approx
 
-from streetlevel import panoramax
-import streetlevel.panoramax.panoramax as pmx
-import streetlevel.panoramax.parse
+from mirrorworld import panoramax
+import mirrorworld.panoramax.panoramax as pmx
+import mirrorworld.panoramax.parse
 
 
 def test_parse_panorama():

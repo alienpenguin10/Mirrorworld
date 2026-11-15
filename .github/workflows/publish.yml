@@ -1,0 +1,85 @@
+# Builds mirrorworld and publishes it with PyPI trusted publishing (OIDC): no API token is stored anywhere.
+#
+# - Push a tag like v0.1.0 to publish that version to PyPI.
+# - Run the workflow by hand ("Run workflow") to publish to TestPyPI for a dry run.
+#
+# One-time setup: add this repository as a trusted publisher on pypi.org and test.pypi.org
+# (owner alienpenguin10, repository Mirrorworld, workflow publish.yml, environment left empty).
+
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check that the tag matches the package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version=$(python -c "import re; print(re.search(r'__version__ = \"(.+)\"', open('mirrorworld/__init__.py').read()).group(1))")
+          test "v$version" = "${GITHUB_REF_NAME}" || { echo "Tag ${GITHUB_REF_NAME} does not match version $version"; exit 1; }
+      - name: Build
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check --strict dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Install the built wheel and run the offline tests
+        run: |
+          python -m pip install "$(ls dist/*.whl)[test]"
+          cd tests && python -m pytest -q
+
+  publish-pypi:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-testpypi:
+    if: github.event_name == 'workflow_dispatch'
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

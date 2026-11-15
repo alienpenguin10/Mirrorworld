@@ -1,5 +1,5 @@
-streetlevel.util
+mirrorworld.util
 ===================================
 
-    .. automodule:: streetlevel.util
+    .. automodule:: mirrorworld.util
       :members:

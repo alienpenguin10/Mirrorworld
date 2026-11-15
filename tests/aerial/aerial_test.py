@@ -1,15 +1,15 @@
-# SURVAI: added test (not upstream). Offline: no network requests.
+# Mirrorworld addition (not in upstream streetlevel). Offline: no network requests.
 import json
 
 from PIL import Image
 from pytest import approx, raises
 
-from streetlevel.aerial import bing, esri, google, usgs
-from streetlevel.aerial.dataclasses import AerialImage
-from streetlevel.aerial.util import bbox_to_pixels, ground_resolution, pixel_to_wgs84, save_aerial_image, \
+from mirrorworld.aerial import bing, esri, google, usgs
+from mirrorworld.aerial.dataclasses import AerialImage
+from mirrorworld.aerial.util import bbox_to_pixels, ground_resolution, pixel_to_wgs84, save_aerial_image, \
     tiles_in_pixel_window, wgs84_to_pixel, zoom_for_resolution, TileResponse
-import streetlevel.aerial.bing.bing
-import streetlevel.aerial.google.google
+import mirrorworld.aerial.bing.bing
+import mirrorworld.aerial.google.google
 
 
 def test_quadkey_roundtrip():
@@ -44,9 +44,9 @@ def test_tiles_in_window():
 def test_missing_rules():
     no_tile = TileResponse(0, 0, 200, {"x-ve-tile-info": "no-tile"}, b"")
     ok = TileResponse(0, 0, 200, {}, b"")
-    assert streetlevel.aerial.bing.bing._is_missing(no_tile)
-    assert not streetlevel.aerial.bing.bing._is_missing(ok)
-    assert streetlevel.aerial.google.google._is_missing(TileResponse(0, 0, 404, {}, b""))
+    assert mirrorworld.aerial.bing.bing._is_missing(no_tile)
+    assert not mirrorworld.aerial.bing.bing._is_missing(ok)
+    assert mirrorworld.aerial.google.google._is_missing(TileResponse(0, 0, 404, {}, b""))
 
 
 def test_tile_urls():

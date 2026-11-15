@@ -3,8 +3,8 @@ import json
 
 from pytest import approx
 
-from streetlevel import kakao
-import streetlevel.kakao.parse
+from mirrorworld import kakao
+import mirrorworld.kakao.parse
 
 def test_parse_panoramas():
     with open("kakao/data/find.json", "r") as f:

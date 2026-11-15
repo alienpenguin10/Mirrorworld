@@ -1,12 +1,12 @@
 Raster
 ======
 
-The georeferenced raster returned by :mod:`streetlevel.services`, :mod:`streetlevel.elevation`,
-:mod:`streetlevel.satellite` and :mod:`streetlevel.aerial.pdok`.
+The georeferenced raster returned by :mod:`mirrorworld.services`, :mod:`mirrorworld.elevation`,
+:mod:`mirrorworld.satellite` and :mod:`mirrorworld.aerial.pdok`.
 
-    .. autoclass:: streetlevel.raster.Raster
+    .. autoclass:: mirrorworld.raster.Raster
       :members:
-    .. autofunction:: streetlevel.raster.utm_crs
-    .. autofunction:: streetlevel.raster.bbox_to_crs
-    .. autofunction:: streetlevel.raster.read_geotiff
-    .. autofunction:: streetlevel.raster.read_cog
+    .. autofunction:: mirrorworld.raster.utm_crs
+    .. autofunction:: mirrorworld.raster.bbox_to_crs
+    .. autofunction:: mirrorworld.raster.read_geotiff
+    .. autofunction:: mirrorworld.raster.read_cog

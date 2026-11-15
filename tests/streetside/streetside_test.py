@@ -1,8 +1,8 @@
 from pytest import approx
 import json
 
-from streetlevel import streetside
-import streetlevel.streetside.parse
+from mirrorworld import streetside
+import mirrorworld.streetside.parse
 
 
 def test_parse_panoramas():

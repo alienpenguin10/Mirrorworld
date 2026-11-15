@@ -2,9 +2,9 @@ import pytest
 from pytest import approx
 import pickle
 
-from streetlevel import mapy
-import streetlevel.mapy.parse
-from streetlevel.dataclasses import Size
+from mirrorworld import mapy
+import mirrorworld.mapy.parse
+from mirrorworld.dataclasses import Size
 
 
 def test_parse_getbest_response():

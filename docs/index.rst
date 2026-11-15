@@ -1,10 +1,8 @@
-streetlevel
+mirrorworld
 ===========
 
-The documentation for `streetlevel <https://github.com/sk-zk/streetlevel>`_, 
-a library for downloading panoramas and metadata from street-level imagery providers via internal APIs.
-
-This fork (Mirrorworld) adds open street-level platforms (Mapillary, KartaView, Panoramax), aerial and satellite
+The documentation for `mirrorworld <https://github.com/alienpenguin10/Mirrorworld>`_, a fork of
+`streetlevel <https://github.com/sk-zk/streetlevel>`_ (street-level imagery via internal APIs) that adds open street-level platforms (Mapillary, KartaView, Panoramax), aerial and satellite
 imagery, elevation models, LiDAR point clouds, generic map services and OpenStreetMap features, all fetched for a
 location or bounding box.
 
@@ -14,24 +12,24 @@ The library uses latitude/longitude order. All coordinates are WGS84 unless spec
    :maxdepth: 1
    :caption: Contents
    
-   streetlevel.baidu
-   streetlevel.ja
-   streetlevel.kakao
-   streetlevel.kartaview
-   streetlevel.lookaround
-   streetlevel.mapillary
-   streetlevel.mapy
-   streetlevel.naver
-   streetlevel.panoramax
-   streetlevel.streetside
-   streetlevel.streetview
-   streetlevel.yandex
-   streetlevel.aerial
-   streetlevel.satellite
-   streetlevel.elevation
-   streetlevel.lidar
-   streetlevel.services
-   streetlevel.vector
+   mirrorworld.baidu
+   mirrorworld.ja
+   mirrorworld.kakao
+   mirrorworld.kartaview
+   mirrorworld.lookaround
+   mirrorworld.mapillary
+   mirrorworld.mapy
+   mirrorworld.naver
+   mirrorworld.panoramax
+   mirrorworld.streetside
+   mirrorworld.streetview
+   mirrorworld.yandex
+   mirrorworld.aerial
+   mirrorworld.satellite
+   mirrorworld.elevation
+   mirrorworld.lidar
+   mirrorworld.services
+   mirrorworld.vector
 
 .. toctree::
    :maxdepth: 1
