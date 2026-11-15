@@ -66,6 +66,52 @@ USGS The National Map
     .. autofunction:: streetlevel.aerial.usgs.get_tile
     .. autofunction:: streetlevel.aerial.usgs.get_tile_async
 
+Esri World Imagery Wayback
+--------------------------
+Every archived release of Esri World Imagery since 2014, for change detection and multi-temporal work.
+:func:`find_versions` lists only the releases that changed the imagery at a place, with capture dates.
+
+    .. autofunction:: streetlevel.aerial.wayback.get_releases
+    .. autofunction:: streetlevel.aerial.wayback.get_releases_async
+    .. autofunction:: streetlevel.aerial.wayback.find_versions
+    .. autofunction:: streetlevel.aerial.wayback.find_versions_async
+    .. autofunction:: streetlevel.aerial.wayback.get_image
+    .. autofunction:: streetlevel.aerial.wayback.get_image_async
+    .. autofunction:: streetlevel.aerial.wayback.download_image
+    .. autofunction:: streetlevel.aerial.wayback.download_image_async
+    .. autofunction:: streetlevel.aerial.wayback.merge_versions
+
+    Usage sample::
+
+      from streetlevel.aerial import wayback
+
+      versions = wayback.find_versions(47.6062, -122.3321)
+      for v in versions:
+          print(v.release.date, v.capture_date, v.resolution, v.provider)
+      wayback.download_image(47.6068, -122.3340, 47.6058, -122.3325, "2011.jpg", release=versions[-1])
+
+    .. autoclass:: streetlevel.aerial.wayback.release.WaybackRelease
+      :members:
+    .. autoclass:: streetlevel.aerial.wayback.release.WaybackVersion
+      :members:
+
+PDOK (Netherlands)
+------------------
+Yearly nationwide Dutch orthophotos in RGB and colour-infrared at 8 cm (5 cm in parts of 2025-2026) and 25 cm.
+Returns a :class:`streetlevel.raster.Raster`.
+
+    .. autofunction:: streetlevel.aerial.pdok.get_raster
+    .. autofunction:: streetlevel.aerial.pdok.get_raster_async
+    .. autofunction:: streetlevel.aerial.pdok.download_raster
+    .. autofunction:: streetlevel.aerial.pdok.list_layers
+    .. autofunction:: streetlevel.aerial.pdok.layer_name
+
+    Usage sample::
+
+      from streetlevel.aerial import pdok
+
+      pdok.download_raster(52.3736, 4.8915, 52.3728, 4.8932, "dam_2025_cir.png", year=2025, infrared=True)
+
 Data classes and utilities
 --------------------------
     .. autoclass:: streetlevel.aerial.dataclasses.AerialImage

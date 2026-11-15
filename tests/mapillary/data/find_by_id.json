@@ -1,0 +1,37 @@
+{
+ "id": "1340409547112764",
+ "geometry": {
+  "type": "Point",
+  "coordinates": [
+   -122.33747545,
+   47.613605049999
+  ]
+ },
+ "computed_geometry": {
+  "type": "Point",
+  "coordinates": [
+   -122.3376130606,
+   47.61330278683
+  ]
+ },
+ "captured_at": 1451621151567,
+ "compass_angle": 199.44884715931,
+ "computed_compass_angle": 345.22861852953,
+ "altitude": 33.195000004768,
+ "computed_altitude": 34.829615549184,
+ "is_pano": true,
+ "camera_type": "spherical",
+ "make": "GoPro",
+ "model": "GoPro Max",
+ "width": 4096,
+ "height": 2048,
+ "sequence": "bD0VKNSGxOtUTIRPaEYLdB",
+ "creator": {
+  "username": "pedestrian_mapping",
+  "id": "540129615613295"
+ },
+ "thumb_256_url": "https://example.invalid/thumb_256_url.jpg",
+ "thumb_1024_url": "https://example.invalid/thumb_1024_url.jpg",
+ "thumb_2048_url": "https://example.invalid/thumb_2048_url.jpg",
+ "thumb_original_url": "https://example.invalid/thumb_original_url.jpg"
+}

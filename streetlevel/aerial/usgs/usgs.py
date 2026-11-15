@@ -13,6 +13,8 @@ from ..util import TileResponse, bbox_to_pixels, get_tiled_image_async, run_sync
 
 PROVIDER = "USGS The National Map Imagery"
 MAX_ZOOM = 23  # the service advertises 23 levels; its tile cache currently stops at 16
+MIN_DETAILED_ZOOM = 10
+"""Outside the US the cache only holds a coarse global background (zoom <= 8); lower maxima count as no imagery."""
 
 
 def get_tile(x: int, y: int, zoom: int, session: Session = None) -> Optional[Image.Image]:
@@ -47,12 +49,13 @@ def find_max_zoom(lat: float, lon: float, session: Session = None) -> Optional[i
     :param lat: Latitude.
     :param lon: Longitude.
     :param session: *(optional)* A requests session.
-    :return: The zoom level, e.g. 16 (≈1.6 m/px) in Seattle, or None if there is no imagery.
+    :return: The zoom level, e.g. 16 (≈1.6 m/px) in Seattle, or None if there is no
+        detailed imagery (outside the US only a coarse global background exists).
     """
     for zoom in range(MAX_ZOOM, -1, -1):
         x, y = _tile_at(lat, lon, zoom)
         if api.tile_exists(x, y, zoom, session):
-            return zoom
+            return zoom if zoom >= MIN_DETAILED_ZOOM else None
     return None
 
 
@@ -60,7 +63,7 @@ async def find_max_zoom_async(lat: float, lon: float, session: ClientSession) ->
     for zoom in range(MAX_ZOOM, -1, -1):
         x, y = _tile_at(lat, lon, zoom)
         if await api.tile_exists_async(x, y, zoom, session):
-            return zoom
+            return zoom if zoom >= MIN_DETAILED_ZOOM else None
     return None
 
 

@@ -1,0 +1,202 @@
+{
+ "features": [
+  {
+   "id": "eab40052-8b34-4a1b-8967-3133e78511eb",
+   "bbox": [
+    -122.3349066,
+    47.6045899,
+    -122.3349066,
+    47.6045899
+   ],
+   "type": "Feature",
+   "links": [
+    {
+     "rel": "license",
+     "href": "https://spdx.org/licenses/CC-BY-SA-4.0.html",
+     "title": "License for this object (CC-BY-SA-4.0)"
+    },
+    {
+     "rel": "self",
+     "href": "https://api.panoramax.xyz/api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd/items/eab40052-8b34-4a1b-8967-3133e78511eb",
+     "type": "application/geo+json"
+    },
+    {
+     "rel": "collection",
+     "href": "https://api.panoramax.xyz/api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd",
+     "type": "application/json"
+    },
+    {
+     "rel": "parent",
+     "href": "https://api.panoramax.xyz/api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd",
+     "type": "application/json"
+    },
+    {
+     "rel": "root",
+     "href": "https://api.panoramax.xyz/api",
+     "type": "application/json",
+     "title": "Instance catalog"
+    },
+    {
+     "rel": "prev",
+     "href": "https://api.panoramax.xyz/api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd/items/38bf930a-a0a2-4084-9aed-4b1c5d51e6c6",
+     "type": "application/geo+json",
+     "geometry": {
+      "type": "Point",
+      "coordinates": [
+       -122.3349295,
+       47.6045696
+      ]
+     },
+     "id": "38bf930a-a0a2-4084-9aed-4b1c5d51e6c6"
+    },
+    {
+     "rel": "next",
+     "href": "https://api.panoramax.xyz/api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd/items/04decda2-9b43-41d5-be27-ccf59b2477e3",
+     "type": "application/geo+json",
+     "geometry": {
+      "type": "Point",
+      "coordinates": [
+       -122.3347568,
+       47.6045061
+      ]
+     },
+     "id": "04decda2-9b43-41d5-be27-ccf59b2477e3"
+    },
+    {
+     "rel": "via",
+     "href": "https://pano.locus.sbs",
+     "type": "application/json",
+     "title": "Link to the original instance",
+     "instance_name": "panoramax-us-nw"
+    }
+   ],
+   "assets": {
+    "hd": {
+     "href": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/hd.jpg",
+     "type": "image/jpeg",
+     "roles": [
+      "data"
+     ],
+     "title": "HD picture",
+     "description": "Highest resolution available of this picture"
+    },
+    "sd": {
+     "href": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/sd.jpg",
+     "type": "image/jpeg",
+     "roles": [
+      "visual"
+     ],
+     "title": "SD picture",
+     "description": "Picture in standard definition (fixed width of 2048px)"
+    },
+    "thumb": {
+     "href": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/thumb.jpg",
+     "type": "image/jpeg",
+     "roles": [
+      "thumbnail"
+     ],
+     "title": "Thumbnail",
+     "description": "Picture in low definition (fixed width of 500px)"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -122.3349066,
+     47.6045899
+    ]
+   },
+   "providers": [
+    {
+     "id": "e9476f76-18c1-4123-be9e-325c0f021a53",
+     "name": "LowestPotential",
+     "roles": [
+      "producer"
+     ]
+    }
+   ],
+   "collection": "028cc60a-2477-4529-9342-cb4fb72a22cd",
+   "properties": {
+    "created": "2026-08-06T04:56:10.656982+00:00",
+    "license": "CC-BY-SA-4.0",
+    "updated": "2026-08-06T04:56:10.656982+00:00",
+    "datetime": "2025-11-02T00:22:42+00:00",
+    "pers:yaw": 0.0,
+    "pers:roll": 0.0,
+    "semantics": [],
+    "collection": {
+     "semantics": [
+      {
+       "key": "original:collection_location",
+       "value": "https://panoramax.openstreetmap.fr//api/collections/028cc60a-2477-4529-9342-cb4fb72a22cd"
+      }
+     ]
+    },
+    "datetimetz": "2025-11-01T17:22:42-07:00",
+    "pers:pitch": 0.0,
+    "annotations": [],
+    "view:azimuth": 119,
+    "geovisio:image": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/hd.jpg",
+    "geovisio:status": "ready",
+    "geovisio:producer": "LowestPotential",
+    "geovisio:thumbnail": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/thumb.jpg",
+    "original_file:name": "GSAA4245.JPG",
+    "original_file:size": 3102796,
+    "geovisio:visibility": "anyone",
+    "tiles:tile_matrix_sets": {
+     "geovisio": {
+      "type": "TileMatrixSetType",
+      "title": "GeoVisio tile matrix for picture eab40052-8b34-4a1b-8967-3133e78511eb",
+      "identifier": "geovisio-eab40052-8b34-4a1b-8967-3133e78511eb",
+      "tileMatrix": [
+       {
+        "type": "TileMatrixType",
+        "tileWidth": 720.0,
+        "identifier": "0",
+        "tileHeight": 720.0,
+        "matrixWidth": 8,
+        "matrixHeight": 4,
+        "topLeftCorner": [
+         0,
+         0
+        ],
+        "scaleDenominator": 1
+       }
+      ]
+     }
+    },
+    "pers:interior_orientation": {
+     "camera_model": "Max",
+     "focal_length": 3.0,
+     "field_of_view": 360,
+     "camera_manufacturer": "GoPro",
+     "sensor_array_dimensions": [
+      5760,
+      2880
+     ]
+    },
+    "geovisio:rank_in_collection": 1282,
+    "quality:horizontal_accuracy": 4.0,
+    "panoramax:horizontal_pixel_density": 16
+   },
+   "stac_version": "1.0.0",
+   "asset_templates": {
+    "tiles": {
+     "href": "https://pano.locus.sbs/api/pictures/eab40052-8b34-4a1b-8967-3133e78511eb/tiled/{TileCol}_{TileRow}.jpg",
+     "type": "image/jpeg",
+     "roles": [
+      "data"
+     ],
+     "title": "HD tiled picture",
+     "description": "Highest resolution available of this picture, as tiles"
+    }
+   },
+   "stac_extensions": [
+    "https://stac-extensions.github.io/view/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/perspective-imagery/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/tiled-assets/v1.0.0/schema.json"
+   ]
+  }
+ ],
+ "links": []
+}

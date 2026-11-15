@@ -24,6 +24,7 @@ dependencies = [
     "bd09convertor",
     "CoordinatesConverter",
     "cython",
+    "mapbox-vector-tile",
     "numpy",
     "Pillow",
     "protobuf > 4",
@@ -37,6 +38,13 @@ dependencies = [
     "requests",
     "scipy",
 ]
+
+[project.optional-dependencies]
+# Mirrorworld additions: GeoTIFF/COG reading and writing (streetlevel.services WCS/ArcGIS tiff, elevation,
+# satellite, Raster.save to .tif) and LiDAR point clouds (streetlevel.lidar).
+raster = ["rasterio"]
+lidar = ["laspy[lazrs]"]
+all = ["rasterio", "laspy[lazrs]"]
 
 [project.urls]
 "Homepage" = "https://github.com/sk-zk/streetlevel"

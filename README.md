@@ -42,21 +42,48 @@ async with ClientSession() as session:
     await streetview.download_panorama_async(pano, f"{pano.id}.jpg", session)
 ```
 
-## Aerial imagery (SURVAI addition)
-`streetlevel.aerial` downloads orthoimagery for a bounding box from Bing Maps, Google Maps, Esri World Imagery
-and USGS The National Map, with the same functions per provider (`find_max_zoom`, `get_image`,
-`download_image`, `get_tile`, each sync and async), and saves it georeferenced (EPSG:3857 world file,
-`.aux.xml`, `.json`):
+## Mirrorworld additions: more modalities for a place
+This fork adds sources that researchers commonly need next to street-level panoramas. Everything is fetched on
+demand for a point or a bounding box (WGS84, lat/lon order) and nothing is hosted by us; results carry their
+georeferencing and source metadata. Sync and async variants are provided wherever the work is network-bound.
+
+| Modality | Module | Sources | Coverage | Key |
+|---|---|---|---|---|
+| Open street-level imagery | `mapillary`, `kartaview`, `panoramax` | Mapillary, KartaView, Panoramax (all CC BY-SA) | worldwide, crowd-sourced: Mapillary dense in cities (incl. UK); KartaView and Panoramax patchy (Panoramax strongest in France) | Mapillary: free token |
+| Detected street assets | `mapillary` (`find_map_features`, `get_detections`, `get_point_cloud`) | Mapillary map features (poles, manholes, junction boxes, signs, ...), segmentations, SfM point clouds | wherever Mapillary has imagery | free token |
+| Aerial imagery (web tiles) | `aerial.bing`, `aerial.google`, `aerial.esri`, `aerial.usgs` | Bing, Google, Esri World Imagery, USGS | worldwide (USGS: US only) | none |
+| Dated aerial imagery | `aerial.wayback` | Esri World Imagery Wayback, 2014 onwards | worldwide | none |
+| National orthophotos | `aerial.pdok` | Netherlands RGB + colour-infrared, 8 cm | Netherlands | none |
+| Satellite | `satellite.sentinel2`, `sentinel1`, `landsat`, `naip`, `worldcover`, generic `satellite.stac` | Earth Search, Microsoft Planetary Computer | worldwide (NAIP: US only) | none |
+| Elevation | `elevation.ea`, `elevation.wales`, `elevation.ahn`, `elevation.usgs3dep`, `elevation.copernicus` | Environment Agency LiDAR (1 m), Welsh Government LiDAR (1 m), AHN (0.5 m), USGS 3DEP, Copernicus GLO-30 | England, Wales, Netherlands, US, worldwide (30 m) | none |
+| LiDAR point clouds | `lidar.usgs3dep`, generic `lidar.ept` | USGS 3DEP on AWS | US (any EPT dataset elsewhere) | none |
+| Any map service | `services.wms`, `wmts`, `wcs`, `arcgis`, `raster.read_cog` | any OGC / ArcGIS server or cloud-optimized GeoTIFF | depends on the service | depends |
+| Vector map data | `vector.osm` | OpenStreetMap via Overpass (ODbL) | worldwide; tag completeness varies (UK street cabinets and poles are sparsely mapped) | none |
 
 ```python
-from streetlevel.aerial import bing
+from streetlevel import mapillary, panoramax
+from streetlevel.aerial import wayback, pdok
+from streetlevel.satellite import sentinel2
+from streetlevel.elevation import ahn
+from streetlevel.lidar import usgs3dep
+from streetlevel.vector import osm
 
-bing.download_image(47.6070, -122.3345, 47.6055, -122.3320, "seattle.jpg", zoom=20)
+poles = mapillary.find_map_features(47.68, -122.30, radius=150, values=["object--support--utility-pole"])
+pics = panoramax.find_panoramas(51.5088, -0.127, radius=30)
+versions = wayback.find_versions(47.6062, -122.3321)            # dated imagery versions at a place
+pdok.download_raster(52.3736, 4.8915, 52.3728, 4.8932, "dam_cir.png", infrared=True)
+s2 = sentinel2.get_raster(47.615, -122.345, 47.600, -122.325, bands=("red", "nir"))
+heights = ahn.get_ndsm(52.3736, 4.8915, 52.3728, 4.8932)         # object heights above ground
+las = usgs3dep.get_points(47.6068, -122.3340, 47.6058, -122.3325, resolution=1.0)
+cabinets = osm.find_features(47.61, -122.34, 47.60, -122.33, {"man_made": "street_cabinet"})
 ```
 
-```sh
-python -m streetlevel.aerial esri 47.6070 -122.3345 47.6055 -122.3320 seattle.jpg --resolution 0.10
-```
+Optional dependencies: `pip install streetlevel[raster]` (rasterio: GeoTIFF/COG for satellite, elevation, WCS,
+ArcGIS) and `pip install streetlevel[lidar]` (laspy with LAZ support). Mapillary reads its token from
+`access_token=` or `MAPILLARY_ACCESS_TOKEN`.
+
+Each source keeps its own terms (listed in each module's docstring and the docs). Bing and Google tiles use
+unofficial endpoints; check their terms before relying on them.
 
 ## Documentation
 Documentation is available at [streetlevel.readthedocs.io](https://streetlevel.readthedocs.io/).
