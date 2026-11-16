@@ -42,10 +42,9 @@ def find_max_zoom(lat: float, lon: float, session: Session = None) -> Optional[i
     :param lat: Latitude.
     :param lon: Longitude.
     :param session: *(optional)* A requests session.
-    Google serves upsampled tiles beyond the native resolution in some areas, so the result is the highest
-    zoom level Google answers, not necessarily the native resolution.
-
-    :return: The zoom level, or None if there is no imagery.
+    :return: The zoom level, or None if there is no imagery. Google serves upsampled tiles beyond the native
+        resolution in some areas, so this is the highest zoom level Google answers, not necessarily the native
+        resolution.
     """
     for zoom in range(MAX_ZOOM, 0, -1):
         x, y = _tile_at(lat, lon, zoom)

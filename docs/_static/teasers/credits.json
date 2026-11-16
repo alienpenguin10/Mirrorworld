@@ -1,0 +1,13 @@
+{
+  "amsterdam_cir": "PDOK / Beeldmateriaal Nederland, CC BY 4.0",
+  "amsterdam_ndsm": "AHN via PDOK, CC0",
+  "amsterdam_osm": "PDOK, CC BY 4.0; (c) OpenStreetMap contributors, ODbL",
+  "amsterdam_rgb": "PDOK / Beeldmateriaal Nederland, CC BY 4.0",
+  "lidar_city": "USGS 3DEP (King County 2021), public domain",
+  "london_ndsm": "Environment Agency LiDAR, Open Government Licence v3.0",
+  "mapillary_detections": "Mapillary, image by lvl5, CC BY-SA 4.0",
+  "naip_false_color": "USDA NAIP, public domain",
+  "naip_poles": "USDA NAIP, public domain; Mapillary map features, CC BY-SA 4.0",
+  "sentinel2_ndvi": "Contains modified Copernicus Sentinel data 2025",
+  "wayback_timeline": "Capture dates from Esri World Imagery Wayback metadata"
+}

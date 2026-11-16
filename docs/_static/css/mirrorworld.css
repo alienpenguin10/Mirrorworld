@@ -1,0 +1,58 @@
+/* mirrorworld docs: landing page and gallery styles (works in light and dark mode) */
+:root { --mw-grad: linear-gradient(120deg, #6c5cff 0%, #2fc6e8 100%); --mw-radius: 14px; }
+
+.mw-hero { position: relative; padding: 2.2rem 0 1.4rem; text-align: center; }
+.mw-hero h1.mw-title { font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 800; letter-spacing: -.03em; margin: .2rem 0 .4rem;
+  background: var(--mw-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw-hero .mw-tagline { font-size: 1.2rem; line-height: 1.55; max-width: 44rem; margin: 0 auto 1.2rem; opacity: .88; }
+.mw-hero .mw-logo { width: 88px; height: 88px; filter: drop-shadow(0 8px 24px rgba(108, 92, 255, .35)); }
+.mw-install { display: inline-flex; align-items: center; gap: .7rem; padding: .65rem 1.1rem; border-radius: 999px;
+  font-family: var(--font-stack--monospace); font-size: .95rem; background: var(--color-background-secondary);
+  border: 1px solid var(--color-background-border); }
+.mw-install b { color: var(--color-brand-primary); }
+.mw-badges { margin-top: 1rem; display: flex; gap: .4rem; justify-content: center; flex-wrap: wrap; }
+.mw-badges img { height: 20px; }
+.mw-cta { margin-top: 1.1rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+.mw-cta a { padding: .55rem 1.1rem; border-radius: 10px; font-weight: 600; text-decoration: none !important; }
+.mw-cta a.primary { background: var(--mw-grad); color: #fff !important; box-shadow: 0 6px 20px rgba(108, 92, 255, .3); }
+.mw-cta a.ghost { border: 1px solid var(--color-background-border); color: var(--color-foreground-primary) !important; }
+
+/* "one place, every view" mosaic */
+.mw-mosaic { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 150px; grid-auto-flow: dense; gap: 8px; margin: 1.6rem 0 .4rem; }
+.mw-mosaic figure { margin: 0; position: relative; overflow: hidden; border-radius: var(--mw-radius); background: #111; }
+.mw-mosaic img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+.mw-mosaic figure:hover img { transform: scale(1.06); }
+.mw-mosaic figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .5rem .6rem .45rem; font-size: .78rem; color: #fff;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .8)); }
+.mw-mosaic figcaption code { background: rgba(255, 255, 255, .18); color: #fff; padding: 0 .3em; border-radius: 4px; font-size: .74rem; border: 0; }
+.mw-mosaic .big { grid-column: span 2; grid-row: span 2; }
+@media (max-width: 760px) { .mw-mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; } }
+.mw-credit { font-size: .75rem; opacity: .65; text-align: right; margin-top: .2rem; }
+
+/* cards */
+.sd-card { border-radius: var(--mw-radius) !important; transition: transform .15s ease, box-shadow .15s ease; }
+.sd-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0, 0, 0, .12) !important; }
+.sd-card .sd-card-title { font-weight: 700; }
+.mw-emoji { font-size: 1.6rem; line-height: 1; margin-right: .35rem; vertical-align: -2px; }
+
+/* figures in guides */
+figure.mw-figure img, .mw-figure img { border-radius: var(--mw-radius); box-shadow: 0 8px 26px rgba(0, 0, 0, .15); }
+figure figcaption, .figure .caption { font-size: .85rem; opacity: .8; }
+
+/* section kicker */
+.mw-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; font-weight: 700; color: var(--color-brand-primary); margin-bottom: .2rem; }
+.mw-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin: 1.2rem 0; }
+.mw-stats div { text-align: center; padding: .9rem .4rem; border-radius: var(--mw-radius); background: var(--color-background-secondary);
+  border: 1px solid var(--color-background-border); }
+.mw-stats b { display: block; font-size: 1.6rem; background: var(--mw-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw-stats span { font-size: .82rem; opacity: .8; }
+@media (max-width: 760px) { .mw-stats { grid-template-columns: repeat(2, 1fr); } }
+table.mw-coverage td, table.mw-coverage th { white-space: nowrap; }
+/* the landing page keeps a real H1 for Sphinx, but the hero shows the visual one */
+section#mirrorworld > h1:first-of-type { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* sidebar logo: small mark next to the name */
+.sidebar-logo { max-width: 56px; margin: 0 auto; }
+.sidebar-logo-container { margin: 1rem 0 .3rem; }
+/* give the landing page (no table of contents) a little more room */
+@media (min-width: 82em) { .content:has(.mw-hero) { width: 52em; } }

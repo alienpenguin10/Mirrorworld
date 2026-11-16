@@ -4,7 +4,8 @@ Sentinel-2 Level-2A surface reflectance (ESA Copernicus), 10-60 m, 13 bands, eve
 from the Earth Search catalogue (Element 84, AWS open data). Free, no key.
 
 Values are scaled reflectance; ``metadata["band_info"]`` gives the scale and offset to convert them
-(reflectance = value * scale + offset). Band names: coastal, blue, green, red, rededge1-3, nir, nir08, nir09,
+(reflectance = value * scale + offset); Earth Search has already removed the BOA offset of newer scenes, so
+the offset reported for those is 0 (see :func:`fix_offsets`). Band names: coastal, blue, green, red, rededge1-3, nir, nir08, nir09,
 swir16, swir22, scl (scene classification, incl. clouds and shadows).
 """
 from datetime import datetime
@@ -82,7 +83,22 @@ def get_raster(north: float, west: float, south: float, east: float,
     raster = stac.read(scenes, bands, north, west, south, east, resolution=resolution, crs=crs,
                        resampling=resampling)
     raster.metadata["license"] = LICENSE
+    fix_offsets(raster, scenes)
     return raster
+
+
+def fix_offsets(raster: Raster, scenes) -> None:
+    """
+    Earth Search re-processes scenes of processing baseline 04.00 and later so that the -1000 BOA offset is already
+    removed (``earthsearch:boa_offset_applied``), but its ``raster:bands`` metadata still lists ``offset: -0.1``.
+    Applying that offset again would make dark surfaces negative, so it is reset to 0 for such scenes.
+    """
+    scenes = [scenes] if isinstance(scenes, Scene) else list(scenes)
+    if scenes and all(s.properties.get("earthsearch:boa_offset_applied") for s in scenes):
+        for info in raster.metadata.get("band_info", {}).values():
+            if "offset" in info:
+                info["offset"] = 0.0
+        raster.metadata["boa_offset_applied"] = True
 
 
 def download_raster(north: float, west: float, south: float, east: float, path: str, **kwargs) -> Raster:

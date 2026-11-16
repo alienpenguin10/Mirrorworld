@@ -1,17 +1,7 @@
-numpy
-Pillow
-pyproj
-requests
-pytest
-protobuf
-pyfrpc
-scipy
-aiohttp
-pycryptodome
-sphinx_rtd_theme
-pyequilib
-torch
-torchvision
-bd09convertor
-CoordinatesConverter
-pyexiv2
+# Docs build, from the repository root: pip install -r docs/requirements.txt (installs mirrorworld for autodoc)
+-e .[all]
+sphinx>=8
+furo
+myst-parser
+sphinx-design
+sphinx-copybutton

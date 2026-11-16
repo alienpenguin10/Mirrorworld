@@ -42,3 +42,17 @@ def test_sign_leaves_other_hosts():
     s = scene("a", 1)
     assert stac.sign_href(s, "https://sentinel-cogs.s3.us-west-2.amazonaws.com/x.tif") == \
         "https://sentinel-cogs.s3.us-west-2.amazonaws.com/x.tif"
+
+
+def test_sentinel2_offset_fix():
+    import numpy as np
+    from mirrorworld.raster import Raster
+    from mirrorworld.satellite import sentinel2
+    r = Raster(data=np.zeros((1, 1, 1)), crs="EPSG:32630", transform=(10, 0, 0, 0, -10, 0),
+               metadata={"band_info": {"red": {"scale": 0.0001, "offset": -0.1}}})
+    applied = scene("a", 1); applied.properties = {"earthsearch:boa_offset_applied": True}
+    sentinel2.fix_offsets(r, [applied])
+    assert r.metadata["band_info"]["red"] == {"scale": 0.0001, "offset": 0.0}
+    r.metadata["band_info"]["red"]["offset"] = -0.1
+    sentinel2.fix_offsets(r, [scene("b", 2)])                 # flag absent: leave the catalogue's offset
+    assert r.metadata["band_info"]["red"]["offset"] == -0.1

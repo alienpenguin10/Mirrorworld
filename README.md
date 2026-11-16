@@ -1,4 +1,7 @@
 # mirrorworld
+
+[![PyPI](https://img.shields.io/pypi/v/mirrorworld?color=6c5cff)](https://pypi.org/project/mirrorworld/) [![Docs](https://img.shields.io/badge/docs-online-2fc6e8)](https://alienpenguin10.github.io/Mirrorworld/) [![Tests](https://github.com/alienpenguin10/Mirrorworld/actions/workflows/python-test.yml/badge.svg)](https://github.com/alienpenguin10/Mirrorworld/actions/workflows/python-test.yml)
+
 **mirrorworld** fetches data about a place from many sources with one consistent API: street-level imagery
 (Google Street View, Apple Look Around, Mapillary, KartaView, Panoramax and more), detected street assets,
 aerial and satellite imagery, elevation models, LiDAR point clouds, any OGC/ArcGIS map service and
@@ -93,7 +96,7 @@ Each source keeps its own terms (listed in each module's docstring and the docs)
 unofficial endpoints; check their terms before relying on them.
 
 ## Documentation
-The API reference lives in [`docs/`](docs/) (Sphinx: `pip install -r docs/requirements.txt && make -C docs html`).
+**Documentation: <https://alienpenguin10.github.io/Mirrorworld/>** — guides, recipes, a coverage table and the full API reference.
 The original streetlevel documentation is at [streetlevel.readthedocs.io](https://streetlevel.readthedocs.io/).
 
 ## Functionality overview
