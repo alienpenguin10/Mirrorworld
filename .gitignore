@@ -136,3 +136,7 @@ dmypy.json
 *.jpg
 *.heic
 *.png
+
+# Docs teaser images are part of the site
+!docs/_static/teasers/*.jpg
+!docs/_static/teasers/*.png
