@@ -78,9 +78,9 @@ Where each source works, checked against the live services. ✅ available · �
   - ✅
   - none
 * - Environment Agency LiDAR
-  - `elevation.ea`
+  - `elevation.ea`, `lidar.ea`
   - ❌
-  - ✅ England, 1 m
+  - ✅ England, 1 m; NLP point clouds
   - ❌
   - ❌
   - none

@@ -22,6 +22,30 @@ USGS 3DEP
       ground = las.points[las.classification == 2]
 
 
+Environment Agency National LIDAR Programme (England)
+------------------------------------------------------
+    .. automodule:: mirrorworld.lidar.ea
+    .. autofunction:: mirrorworld.lidar.ea.get_points
+    .. autofunction:: mirrorworld.lidar.ea.download_points
+    .. autofunction:: mirrorworld.lidar.ea.search
+    .. autofunction:: mirrorworld.lidar.ea.find_years
+    .. autofunction:: mirrorworld.lidar.ea.download_tile
+    .. autofunction:: mirrorworld.lidar.ea.tile_name
+    .. autofunction:: mirrorworld.lidar.ea.tile_bounds
+    .. autofunction:: mirrorworld.lidar.ea.crop_files
+    .. autofunction:: mirrorworld.lidar.ea.cache_dir
+    .. autoclass:: mirrorworld.lidar.ea.Tile
+      :members:
+
+    Usage sample::
+
+      from mirrorworld.lidar import ea
+
+      print(ea.search(51.5085, -0.1290, 51.5070, -0.1260))            # tiles and survey years covering the box
+      las = ea.get_points(51.5085, -0.1290, 51.5070, -0.1260)         # downloads and caches each tile once
+      ground = las.points[las.classification == 2]
+
+
 Any EPT dataset
 ---------------
     .. autofunction:: mirrorworld.lidar.ept.get_info

@@ -66,7 +66,7 @@ georeferencing and source metadata. Sync and async variants are provided whereve
 | National orthophotos | `aerial.pdok` | Netherlands RGB + colour-infrared, 8 cm | Netherlands | none |
 | Satellite | `satellite.sentinel2`, `sentinel1`, `landsat`, `naip`, `worldcover`, generic `satellite.stac` | Earth Search, Microsoft Planetary Computer | worldwide (NAIP: US only) | none |
 | Elevation | `elevation.ea`, `elevation.wales`, `elevation.ahn`, `elevation.usgs3dep`, `elevation.copernicus` | Environment Agency LiDAR (1 m), Welsh Government LiDAR (1 m), AHN (0.5 m), USGS 3DEP, Copernicus GLO-30 | England, Wales, Netherlands, US, worldwide (30 m) | none |
-| LiDAR point clouds | `lidar.usgs3dep`, generic `lidar.ept` | USGS 3DEP on AWS | US (any EPT dataset elsewhere) | none |
+| LiDAR point clouds | `lidar.usgs3dep`, `lidar.ea`, generic `lidar.ept` | USGS 3DEP on AWS, Environment Agency National LIDAR Programme (OGL v3) | US, England (any EPT dataset elsewhere) | none |
 | Any map service | `services.wms`, `wmts`, `wcs`, `arcgis`, `raster.read_cog` | any OGC / ArcGIS server or cloud-optimized GeoTIFF | depends on the service | depends |
 | Vector map data | `vector.osm` | OpenStreetMap via Overpass (ODbL) | worldwide; tag completeness varies (UK street cabinets and poles are sparsely mapped) | none |
 
